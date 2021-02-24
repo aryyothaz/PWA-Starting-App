@@ -1,0 +1,10 @@
+body {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.main-container {
+  display: grid;
+  place-items: center;
+}
