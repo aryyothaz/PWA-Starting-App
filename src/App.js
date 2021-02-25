@@ -66,7 +66,6 @@ function App() {
             txCharacteristic.addEventListener('characteristicvaluechanged',
                                             handleNotifications);
             setConnected(true);
-            window.term_.io.println('\r\n' + device.name + ' Connected.');
         })
         .catch(error => {
             console.log('' + error);
@@ -79,7 +78,6 @@ function App() {
 
     function onDisconnected() {
         setConnected(false);
-        window.term_.io.println('\r\n' + device.name + ' Disconnected.');
     }
 
     function handleNotifications(event) {
@@ -89,6 +87,7 @@ function App() {
         for (let i = 0; i < value.byteLength; i++) {
             str += String.fromCharCode(value.getUint8(i));
         }
+        
     }
 
     return (
@@ -96,6 +95,9 @@ function App() {
         <h1>Get Device Battery Info Over Bluetooth</h1>
         {supportsBluetooth &&
             <button onClick={connectToDevice}>Connect to a Bluetooth device</button>
+        }
+        {connected &&
+            <h2>Dispositivo conectado!</h2>
         }
         </div>
     );
