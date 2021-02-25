@@ -34,42 +34,61 @@ function App() {
    * battery level readings using the battery service.
    */
   const connectToDeviceAndSubscribeToUpdates = async () => {
-    try {
-      // Search for Bluetooth devices that advertise a battery service
-      const device = await navigator.bluetooth
-        .requestDevice({
-          filters: [{services: [0xFFE0]}]
-        });
-
-      setIsDisconnected(false);
-
-      // Add an event listener to detect when a device disconnects
-      device.addEventListener('gattserverdisconnected', onDisconnected);
-
-      // Try to connect to the remote GATT Server running on the Bluetooth device
-      const server = await device.gatt.connect();
-
-      // Get the battery service from the Bluetooth device
-      const service = await server.getPrimaryService(0xFFE0);
-
-      // Get the battery level characteristic from the Bluetooth device
-      const characteristic = await service.getCharacteristic(0xFFE1);
-
-      // Subscribe to battery level notifications
-      characteristic.startNotifications();
-
-      // When the battery level changes, call a function
-      characteristic.addEventListener('characteristicvaluechanged',
-                                  handleCharacteristicValueChanged);
-      
-      // Read the battery level value
-      const reading = await characteristic.readValue();
-
-      // Show the initial reading on the web page
-      setBatteryLevel(reading.getUint8(0) + '%');
-    } catch(error) {
-      console.log(`There was an error: ${error}`);
-    }
+    navigator.bluetooth.requestDevice({
+        optionalServices: [bleNusServiceUUID],
+        acceptAllDevices: true
+    })
+    .then(device => {
+        bleDevice = device; 
+        console.log('Found ' + device.name);
+        console.log('Connecting to GATT Server...');
+        bleDevice.addEventListener('gattserverdisconnected', onDisconnected);
+        return device.gatt.connect();
+    })
+    .then(server => {
+        console.log('Locate NUS service');
+        return server.getPrimaryService(bleNusServiceUUID);
+    }).then(service => {
+        nusService = service;
+        console.log('Found NUS service: ' + service.uuid);
+    })
+    .then(() => {
+        console.log('Locate RX characteristic');
+        return nusService.getCharacteristic(bleNusCharRXUUID);
+    })
+    .then(characteristic => {
+        rxCharacteristic = characteristic;
+        console.log('Found RX characteristic');
+    })
+    .then(() => {
+        console.log('Locate TX characteristic');
+        return nusService.getCharacteristic(bleNusCharTXUUID);
+    })
+    .then(characteristic => {
+        txCharacteristic = characteristic;
+        console.log('Found TX characteristic');
+    })
+    .then(() => {
+        console.log('Enable notifications');
+        return txCharacteristic.startNotifications();
+    })
+    .then(() => {
+        console.log('Notifications started');
+        txCharacteristic.addEventListener('characteristicvaluechanged',
+                                          handleNotifications);
+        connected = true;
+        window.term_.io.println('\r\n' + bleDevice.name + ' Connected.');
+        nusSendString('\r');
+        setConnButtonState(true);
+    })
+    .catch(error => {
+        console.log('' + error);
+        window.term_.io.println('' + error);
+        if(bleDevice && bleDevice.gatt.connected)
+        {
+            bleDevice.gatt.disconnect();
+        }
+    });
   };
 
   return (
