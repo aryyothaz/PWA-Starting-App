@@ -38,7 +38,7 @@ function App() {
       // Search for Bluetooth devices that advertise a battery service
       const device = await navigator.bluetooth
         .requestDevice({
-          filters: [{services: ['battery_service']}]
+          filters: [{services: [0xFFE0]}]
         });
 
       setIsDisconnected(false);
@@ -50,10 +50,10 @@ function App() {
       const server = await device.gatt.connect();
 
       // Get the battery service from the Bluetooth device
-      const service = await server.getPrimaryService('battery_service');
+      const service = await server.getPrimaryService(0xFFE0);
 
       // Get the battery level characteristic from the Bluetooth device
-      const characteristic = await service.getCharacteristic('battery_level');
+      const characteristic = await service.getCharacteristic(0xFFE1);
 
       // Subscribe to battery level notifications
       characteristic.startNotifications();
