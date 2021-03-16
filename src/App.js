@@ -2,15 +2,13 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-    const BLEService_UUID  = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
-    const BLECharRX_UUID   = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
-    const BLECharTX_UUID   = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
+    const BLEService_UUID  = 0x1700;
+    const BLE_Characteristic_UUID = 0x1A00;
 
     const [device, setDevice] = useState(null);
     const [server, setServer] = useState(null);
     const [service, setService] = useState(null);
-    const [rxCharacteristic, setRxCharacteristic] = useState(null);
-    const [txCharacteristic, setTxCharacteristic] = useState(null);
+    const [characteristic , setCharacteristic] = useState(null);
     const [connected, setConnected] = useState(false);
 
     const [supportsBluetooth, setSupportsBluetooth] = useState(false);
@@ -40,30 +38,19 @@ function App() {
         .then(service => {
             setService(service); 
             console.log('Found NUS service: ' + service.uuid);
-        })
-        .then(() => {
-            console.log('Locate RX characteristic');
-            return service.getCharacteristic(BLECharRX_UUID);
+            return service.getCharacteristic(BLE_Characteristic_UUID);
         })
         .then(characteristic => {
-            rxCharacteristic = characteristic;
+            setCharacteristic(characteristic);
             console.log('Found RX characteristic');
         })
         .then(() => {
-            console.log('Locate TX characteristic');
-            return service.getCharacteristic(BLECharTX_UUID);
-        })
-        .then(characteristic => {
-            txCharacteristic = characteristic;
-            console.log('Found TX characteristic');
-        })
-        .then(() => {
             console.log('Enable notifications');
-            return txCharacteristic.startNotifications();
+            return characteristic.startNotifications();
         })
         .then(() => {
             console.log('Notifications started');
-            txCharacteristic.addEventListener('characteristicvaluechanged',
+            characteristic.addEventListener('characteristicvaluechanged',
                                             handleNotifications);
             setConnected(true);
         })
@@ -87,7 +74,7 @@ function App() {
         for (let i = 0; i < value.byteLength; i++) {
             str += String.fromCharCode(value.getUint8(i));
         }
-        
+        console.log(str);
     }
 
     return (
