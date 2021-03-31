@@ -77,7 +77,7 @@ class Bluetooth extends React.Component {
         } = this.state;
         return (
         <div className="Bluetooth">
-            {supportsBluetooth &&
+            {supportsBluetooth ?
                 <BluetoothConnect
                     device= {device}
                     onDeviceChange= {this.handleDeviceChange}
@@ -92,8 +92,7 @@ class Bluetooth extends React.Component {
                     handleNotifications= {this.handleNotifications}
                     onDisconnected= {this.onDisconnected}
                 />
-            }
-            {!supportsBluetooth &&
+                :
                 <div className="no-bt">
                     Este dispositivo no soporta bluetooth.
                 </div>
