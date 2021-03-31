@@ -24,6 +24,7 @@ class BluetoothInput extends React.Component {
           onChange={(e) => this.emptyInput(e)}
           autoComplete="BluetoothInput"
         />
+        <button type="submit">Enviar</button>
       </form>
     );
   }
