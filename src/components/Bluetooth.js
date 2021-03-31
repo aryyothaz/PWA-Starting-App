@@ -2,9 +2,6 @@ import BluetoothInput from "./BluetoothInput";
 import React from "react";
 import BluetoothConnect from "./BluetoothConnect";
 
-const BLEService_UUID  = 0x1700;
-const BLE_Characteristic_UUID = 0x1A00;
-
 class Bluetooth extends React.Component {
 
     state = {
@@ -95,6 +92,11 @@ class Bluetooth extends React.Component {
                     handleNotifications= {this.handleNotifications}
                     onDisconnected= {this.onDisconnected}
                 />
+            }
+            {!supportsBluetooth &&
+                <div className="no-bt">
+                    Este dispositivo no soporta bluetooth.
+                </div>
             }
             {connected &&
                 <div className="connected">
