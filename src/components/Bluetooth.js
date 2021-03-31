@@ -76,7 +76,7 @@ class Bluetooth extends React.Component {
             characteristic,
         } = this.state;
         return (
-        <div className="Bluetooth">+
+        <div className="Bluetooth">
             <h1 className="bluetooth-title">Bluetooth</h1>
             {supportsBluetooth ?
                 <BluetoothConnect
