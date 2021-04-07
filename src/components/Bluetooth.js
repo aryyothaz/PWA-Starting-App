@@ -47,6 +47,7 @@ class Bluetooth extends React.Component {
     for (let i = 0; i < value.byteLength; i++) {
       str += String.fromCharCode(value.getUint8(i));
     }
+    console.log(str);
     this.setState({
       value: str,
     });
