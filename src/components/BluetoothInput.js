@@ -4,7 +4,6 @@ class BluetoothInput extends React.Component {
   input = React.createRef();
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.input.current.value);
     this.props.onBluetoothInputChange(this.input.current.value);
   };
   emptyInput = (e) => {

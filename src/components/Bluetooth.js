@@ -47,7 +47,6 @@ class Bluetooth extends React.Component {
     for (let i = 0; i < value.byteLength; i++) {
       str += String.fromCharCode(value.getUint8(i));
     }
-    console.log(str);
     this.setState({
       value: str,
     });
@@ -58,9 +57,9 @@ class Bluetooth extends React.Component {
     console.log("Setting Characteristic...");
 
     this.state.characteristic
-      .writeValue(encoder.encode(value))
+      .writeValue(encoder.encode(value + "\r\n"))
       .then((_) => {
-        console.log("> Characteristic changed to: " + value);
+        console.log("> Characteristic changed to: " + value + "\r\n");
       })
       .catch((error) => {
         console.log("Set Characteristic error: " + error);
