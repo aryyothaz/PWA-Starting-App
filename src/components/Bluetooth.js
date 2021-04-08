@@ -53,13 +53,15 @@ class Bluetooth extends React.Component {
   };
 
   handleBluetoothInputChange = (value) => {
-    let encoder = new TextEncoder("utf-8");
+    let encoder = new TextEncoder();
     console.log("Setting Characteristic...");
-
+    let array = encoder.encode(value);
+    array.push(13);
+    array.push(10);
     this.state.characteristic
-      .writeValue(encoder.encode(value))
+      .writeValue(array)
       .then((_) => {
-        console.log("> Characteristic changed to: " + value);
+        console.log("> Characteristic changed to: " + value + ": " + array);
       })
       .catch((error) => {
         console.log("Set Characteristic error: " + error);
