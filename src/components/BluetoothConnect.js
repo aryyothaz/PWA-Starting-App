@@ -1,8 +1,8 @@
 import React from "react";
 import BluetoothConnectButton from "./BluetoothConnectButton";
 
-const BLEService_UUID = "37fc19ab-98ca-4543-a68b-d183da78acdc";
-const BLE_Characteristic_UUID = "a40d0c2e-73ba-4d8b-8eef-9a0666992e56";
+const BLEService_UUID = "18902a9a-1f4a-44fe-936f-14c8eea41800";
+const BLE_Characteristic_UUID = "18902a9a-1f4a-44fe-936f-14c8eea41801";
 
 class BluetoothConnect extends React.Component {
   connectToDevice = async () => {
