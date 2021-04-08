@@ -57,7 +57,7 @@ class Bluetooth extends React.Component {
     console.log("Setting Characteristic...");
 
     this.state.characteristic
-      .writeValue(encoder.encode(value) + "\r" + "\n")
+      .writeValue(encoder.encode(value))
       .then((_) => {
         console.log("> Characteristic changed to: " + value);
       })
